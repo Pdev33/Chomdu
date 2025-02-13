@@ -1,7 +1,6 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Alert,
-  AppBar,
   Box,
   Button,
   Card,
@@ -15,15 +14,14 @@ import {
   MenuItem,
   Modal,
   TextField,
-  Toolbar,
   Typography,
 } from "@mui/material";
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
 import { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
-import { Link } from "react-router-dom";
 import type { Expense } from "../../../../server/src/modules/item/expense/expenseRepository";
 import type { user } from "../../../../server/src/modules/item/user/userRepository";
+import Header from "../../components/Header";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -37,6 +35,8 @@ const categories = [
   "autres",
 ];
 
+const getCurrentDate = () => new Date().toISOString().split("T")[0];
+
 export default function Home() {
   const [user, setUser] = useState<user | null>(null);
   const [open, setOpen] = useState(false);
@@ -47,10 +47,9 @@ export default function Home() {
     description: "",
     amount: "",
     category: "",
-    date: "",
+    date: getCurrentDate(),
     user_id: 1,
   });
-
   useEffect(() => {
     fetchExpenses();
     fetchUser();
@@ -124,7 +123,6 @@ export default function Home() {
       }
     }
   };
-
   const deleteExpense = async (id: number) => {
     try {
       const response = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
@@ -136,6 +134,20 @@ export default function Home() {
         setError(err.message);
       }
     }
+  };
+  const options = {
+    plugins: {
+      legend: {
+        labels: {
+          font: {
+            size: 14,
+            weight: "bold" as const,
+          },
+          boxWidth: 20,
+          boxHeight: 20,
+        },
+      },
+    },
   };
 
   const chartData = {
@@ -160,30 +172,7 @@ export default function Home() {
 
   return (
     <>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography
-            variant="h6"
-            sx={{
-              flexGrow: 1,
-              cursor: "pointer",
-              textDecoration: "none",
-              color: "inherit",
-            }}
-            component={Link}
-            to="/"
-          >
-            Chomdu
-          </Typography>
-          <Button color="inherit" component={Link} to="/history">
-            Historique
-          </Button>
-          <Button color="inherit" component={Link} to="/account">
-            Compte
-          </Button>
-        </Toolbar>
-      </AppBar>
-
+      <Header />
       <Container sx={{ mt: 4 }}>
         <Card sx={{ mb: 2 }}>
           <CardContent>
@@ -214,7 +203,7 @@ export default function Home() {
 
         <Card sx={{ mb: 2, display: "flex", justifyContent: "center" }}>
           <CardContent>
-            <Doughnut data={chartData} />
+            <Doughnut data={chartData} options={options} />
           </CardContent>
         </Card>
 
@@ -248,7 +237,7 @@ export default function Home() {
           </CardContent>
         </Card>
 
-        <Box sx={{ textAlign: "center" }}>
+        <Box sx={{ textAlign: "center", m: 4 }}>
           <Button variant="contained" onClick={() => setOpen(true)}>
             Ajouter
           </Button>
@@ -318,7 +307,11 @@ export default function Home() {
           <Button
             variant="contained"
             fullWidth
-            onClick={() => addExpense().then(() => fetchExpenses())}
+            onClick={() =>
+              addExpense()
+                .then(() => getCurrentDate())
+                .then(() => fetchExpenses())
+            }
           >
             Valider
           </Button>
