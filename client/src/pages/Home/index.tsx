@@ -173,6 +173,9 @@ export default function Home() {
   return (
     <>
       <Header />
+      <Typography variant="h4" sx={{ m: 2, textAlign: "center" }}>
+        Bonjour {user ? user.username : "Chargement..."}
+      </Typography>
       <Container sx={{ mt: 4 }}>
         <Card sx={{ mb: 2 }}>
           <CardContent>
@@ -209,7 +212,7 @@ export default function Home() {
 
         <Card sx={{ mb: 2 }}>
           <CardContent>
-            <Typography variant="h6">Liste des dernières dépenses</Typography>
+            <Typography variant="h5">Liste des dernières dépenses</Typography>
 
             {loading && <CircularProgress />}
             {error && <Alert severity="error">{error}</Alert>}
