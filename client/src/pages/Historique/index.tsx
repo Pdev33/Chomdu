@@ -78,8 +78,8 @@ export default function History() {
         <Card sx={{ mt: 2, p: 2 }}>
           <Box>
             <Typography
-              variant="h6"
-              sx={{ backgroundColor: "", textAlign: "center", mt: 4 }}
+              variant="h5"
+              sx={{ backgroundColor: "", textAlign: "center", m: 2 }}
             >
               Historique des dépenses
             </Typography>
@@ -116,7 +116,7 @@ export default function History() {
           </Box>
         </Card>
         <Card sx={{ mt: 2 }}>
-          <Typography variant="h6" sx={{ textAlign: "center", m: 2 }}>
+          <Typography variant="h5" sx={{ textAlign: "center", m: 2 }}>
             Trier vos dépenses
           </Typography>
 
